@@ -110,6 +110,7 @@
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"
+      customArchiveName = "Strava club events and announcements"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

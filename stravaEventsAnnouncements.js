@@ -75,7 +75,6 @@ class StravaEventsAnnouncements  {
                     events.push(event);
                 }
             }
-            console.log(events);
             return events;
         }
         catch (err) {

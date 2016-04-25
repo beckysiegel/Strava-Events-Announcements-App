@@ -102,7 +102,7 @@ class StravaEvents extends Component {
       this.setState({
         dataSource2: this.state.dataSource.cloneWithRows(announcements),
         loaded: true,
-        selectedTab: 'blueTab'
+        selectedTab: 'redTab'
       });
     }
   }
@@ -120,7 +120,11 @@ class StravaEvents extends Component {
       AsyncStorage.setItem("code", code[1]);
 
       this.code = code[1];
-      let {events, announcements} = await this._getUserClubInfo();
+
+      this.stravaEventsAnnouncements = new stravaEventsAnnouncements.StravaEventsAnnouncements(this.code, AsyncStorage);
+
+      this.getEventsAnnouncements("events");
+      this.getEventsAnnouncements("announcements");
 
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(events),
