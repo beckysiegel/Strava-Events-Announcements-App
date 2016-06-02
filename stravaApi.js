@@ -52,6 +52,20 @@ class StravaApi  {
         }
 
     }
+
+    async deauthorize() {
+        try {
+            let response = await fetch('https://www.strava.com/oauth/deauthorize', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer '+this.access_token
+                }
+            });
+        } catch (err) {
+            console.log(err)
+        }
+
+    }
 }
 
 exports.StravaApi = StravaApi;

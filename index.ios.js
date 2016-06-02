@@ -19,16 +19,32 @@ import React, {
     AsyncStorage
 } from 'react-native';
 
+import SafariView from "react-native-safari-view";
+
 var config = require('./config.js');
 var stravaEventsAnnouncements = require('./stravaEventsAnnouncements');
 
 function stravaOauth () {
-  Linking.openURL([
+
+  url = [
     'https://www.strava.com/oauth/authorize',
     '?response_type=code',
     '&client_id=' + config.client_id,
-    '&redirect_uri=awesomestrava://oauth.io'
-  ].join(''))
+    '&redirect_uri=http://whosriding.beckysiegel.com/'
+  ].join('')
+
+  console.log(url);
+
+  SafariView.show({
+    url: url
+  });
+  //
+  //Linking.openURL([
+  //  'https://www.strava.com/oauth/authorize',
+  //  '?response_type=code',
+  //  '&client_id=' + config.client_id,
+  //  '&redirect_uri=awesomestrava://oauth.io'
+  //].join(''))
 }
 var base64CalIcon = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAC/UlEQVR4Xu2d4XETQQxGpU5IBUAHpAM6ASohlEIH6YCkAuhEzM44MHFsK99K8eacl7/Wau/eW2mdS+bWjZ+lBHzp7ExuCFi8CBCAgMUEFk9PBSBgMYHF01MBly4gIuLUPbr70kWw+vpe/OZX32C2wFdfHwIWVygCEMAekLXJ0uere2x28auvjxZEC6IFZVV68vOIeGdmX8zsk5l9KCXbzuA7M7s1sx/u/qdy2aUWFBHfzexr5QIuYOyNu3+bvY9pARHx6w2t+IzvrbtfZ0GHPp8SEBE3u7YzM+eljhntSO4GsoBdz/99qRSL93Wl7gkzAlj9xy3JVTAjgN5/XMCdu39UqmhGwMnHy8rklxirPl5HQPMqQEAzUDUdAlRizfEIaAaqpkOASqw5HgHNQNV0CFCJNccjoBmomg4BKrHmeAQ0A1XTIUAl1hyPgGagarrlAtQLUG9wdXz3v7G0P4xDgPZfHggQS4oKEIF1hyOgm6iYDwEisO5wBHQTFfMhQATWHY6AbqJiPgSIwLrDEdBNVMyHABFYdzgCuomK+RAgAusOR0A3UTEfAkRg3eEI2COaAVEFZI/Ts/my8fvXs/nH0RkQBKgExHgE7AFTS1Dk/SQcAQh4REBdgOwB4gLKKg4BxZ6WAUQAX0Nf1zvgshWpFgQVIBJDgLiJiXzTcAQggK+haZkIAewBAqwRSguiBdGCxKI5GU4LEmnSgmhBtCCxaGhBncBoQYtbUKfM5+TKhGeb+P4cm/97wHOgdcYgoJPmRC4ETEDrHIKATpoTuRAwAa1zCAI6aU7kQsAEtM4hr15A581uMdc5fg8Yhxe83yKcM1zzvbtLh1jM/CLGy7uPmzzLy7vHkSW8vv6whJd/ff2YlwMcDtKXV//IIregh6kjgr3gv4ef7v55Zo+ZFkAl/MM9tfIfRpcE7CSMPWGcnTKOsXor347ud8dYjROU1h1jNVNyjHlMoFwBAK0RQECNX3k0AsoIawkQUONXHo2AMsJaAgTU+JVHI6CMsJbgL4lYcn81XBSbAAAAAElFTkSuQmCC';
 var base64NotifyIcon = 'data:image/png;base64,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';
@@ -47,7 +63,8 @@ class StravaEvents extends Component {
         rowHasChanged: (row1, row2) => row1 !== row2
       }),
       loaded: false,
-      refreshing: false
+      refreshing: false,
+      loggedin: false
     };
   }
 
@@ -68,16 +85,15 @@ class StravaEvents extends Component {
   componentDidMount() {
     AsyncStorage.getItem("code").then((value) => {
       this.setState({"code": value});
-      this.code=value;
+      this.code = value;
 
-      if(value == null){
-        stravaOauth(config.app_key);
-      } else {
+      if (value != null) {
+        this.setState({"loggedin": true})
 
         this.stravaEventsAnnouncements = new stravaEventsAnnouncements.StravaEventsAnnouncements(this.code, AsyncStorage);
 
         this.getEventsAnnouncements("events");
-        this.getEventsAnnouncements("announcements");
+        this.getEventsAnnouncements("announcements", true);
       }
 
       var url = Linking.addEventListener('url', this._handleOpenURL.bind(this));
@@ -85,7 +101,7 @@ class StravaEvents extends Component {
     }).done();
   };
 
-  async getEventsAnnouncements(type) {
+  async getEventsAnnouncements(type, skipShow) {
     if (type == "events") {
 
       let events = await this.stravaEventsAnnouncements._getUserEvents();
@@ -99,17 +115,27 @@ class StravaEvents extends Component {
     else if(type == "announcements") {
       let announcements = await this.stravaEventsAnnouncements._getUserAnnouncements();
 
+      var selectedTab;
+
+      if(!skipShow){
+        selectedTab = 'redTab';
+      } else {
+        selectedTab = 'blueTab';
+      }
+
       this.setState({
         dataSource2: this.state.dataSource.cloneWithRows(announcements),
         loaded: true,
-        selectedTab: 'redTab'
+        selectedTab: selectedTab
       });
     }
   }
 
   async _handleOpenURL(event) {
     try {
-      var code = event.url.split('&code=');
+      var code = event.url.split('?code=');
+
+      console.log(code);
 
       AsyncStorage.setItem("code", code[1]);
 
@@ -118,20 +144,22 @@ class StravaEvents extends Component {
       }
 
       AsyncStorage.setItem("code", code[1]);
+      this.setState({
+        loggedin: true
+      });
 
       this.code = code[1];
 
       this.stravaEventsAnnouncements = new stravaEventsAnnouncements.StravaEventsAnnouncements(this.code, AsyncStorage);
 
       this.getEventsAnnouncements("events");
-      this.getEventsAnnouncements("announcements");
 
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(events),
-        dataSource2: this.state.dataSource.cloneWithRows(announcements),
-        loaded: true,
-        selectedTab: 'blueTab'
-      });
+      //this.setState({
+      //  dataSource: this.state.dataSource.cloneWithRows(events),
+      //  dataSource2: this.state.dataSource.cloneWithRows(announcements),
+      //  loaded: true,
+      //  selectedTab: 'blueTab'
+      //});
     }
 
     catch (err) {
@@ -182,7 +210,11 @@ class StravaEvents extends Component {
 
 
   render() {
-    if (!this.state.loaded) {
+    if (!this.state.loggedin) {
+      return this.renderLoginView();
+    }
+
+    else if (!this.state.loaded) {
       return this.renderLoadingView();
     }
 
@@ -230,6 +262,30 @@ class StravaEvents extends Component {
     return this.getEventsAnnouncements("announcements");
   }
 
+  renderLoginView() {
+    return (
+        <View style={styles.container}>
+          <Text style={styles.pageTitle}>Welcome!</Text>
+
+          <Text  style={styles.welcomeMessage}>
+            Login or create an account with Strava:
+          </Text>
+
+          <View style={styles.loginContainer}>
+
+            <TouchableHighlight  style={styles.loginButton} underlayColor={'#fff'} onPress={()=> stravaOauth()}>
+                <Image source={require('./images/ConnectWithStrava@2x.png')} />
+            </TouchableHighlight>
+            <TouchableHighlight style={styles.loginButton} underlayColor={'#fff'} onPress={()=> this.handleClick(`https://www.strava.com/register/free`)}>
+                <Text>
+                  Create New Account
+                </Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+    );
+  }
+
   renderLoadingView() {
     return (
         <View style={styles.loadingContainer}>
@@ -241,7 +297,9 @@ class StravaEvents extends Component {
   }
 
   handleClick(url) {
-    Linking.openURL(url)
+    SafariView.show({
+      url: url
+    });
   }
 
   renderEvent(event) {
@@ -360,6 +418,18 @@ var styles = StyleSheet.create({
     resizeMode: 'contain',
     marginRight: 10,
     marginLeft: 10
+  },
+  welcomeMessage: {
+    margin: 20
+  },
+  loginContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginTop: 50
+  },
+  loginButton: {
+    margin: 10
   }
 });
 
