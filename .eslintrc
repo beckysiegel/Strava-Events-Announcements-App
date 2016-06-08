@@ -1,0 +1,13 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["eslint:recommended", "plugin:react/recommended","airbnb-base"],
+  "rules": {
+    "strict": 0
+  },
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react"
+  ],
+}

@@ -1,71 +1,65 @@
-var config = require('./config.js');
+const config = require('./config.js');
 
+class StravaApi {
+  constructor(code) {
+    this.code = code;
+  }
 
-class StravaApi  {
-    constructor(code) {
-        this.code = code;
+  async getToken() {
+    try {
+      const response = await fetch('https://www.strava.com/oauth/token', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          client_id: config.client_id,
+          client_secret: config.client_secret,
+          code: this.code,
+        }),
+      });
+
+      const responseData = await response.json();
+      this.access_token = await responseData.access_token;
+    } catch (err) {
+      return;
     }
+  }
 
-    async getToken() {
-        try {
-            let response = await fetch('https://www.strava.com/oauth/token', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    client_id: config.client_id,
-                    client_secret: config.client_secret,
-                    code: this.code
-                })
-            });
+  async stravaGet(url) {
+    try {
+      if (!this.access_token) {
+        await this.getToken();
+      }
 
-            let responseData  =  await response.json();
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.access_token}`,
+        },
+      });
 
-            this.access_token = await responseData.access_token;
-
-        } catch (err) {
-            console.log(err)
-        }
-
+      const responseData = await response.json();
+      return responseData;
+    } catch (err) {
+      return { error: err };
     }
+  }
 
-    async stravaGet (url) {
-        try {
-            if(!this.access_token){
-                await this.getToken()
-            }
-
-            let response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer '+this.access_token
-                }
-            });
-
-            let responseData  =  await response.json();
-            return responseData;
-
-        } catch (err) {
-            console.log(err)
-        }
-
+  async deauthorize() {
+    try {
+      const response = await fetch('https://www.strava.com/oauth/deauthorize', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.access_token}`,
+        },
+      });
+      return response;
+    } catch (err) {
+      return { error: err };
     }
-
-    async deauthorize() {
-        try {
-            let response = await fetch('https://www.strava.com/oauth/deauthorize', {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer '+this.access_token
-                }
-            });
-        } catch (err) {
-            console.log(err)
-        }
-
-    }
+  }
 }
 
 exports.StravaApi = StravaApi;
