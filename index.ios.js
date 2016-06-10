@@ -186,6 +186,12 @@ class StravaEvents extends Component {
   }
 
   async getEventsAnnouncements(type, skipShow) {
+    if (!skipShow) {
+      this.setState({
+        selectedTab: 'eventTab',
+      });
+    }
+
     if (type === 'events') {
       const events = await this.stravaEventsAnnouncements.getUserEvents();
       this.setState({
@@ -195,18 +201,18 @@ class StravaEvents extends Component {
       });
     } else if (type === 'announcements') {
       const announcements = await this.stravaEventsAnnouncements.getUserAnnouncements();
-      let selectedTab;
       if (!skipShow) {
-        selectedTab = 'announcementTab';
+        this.setState({
+          dataSource2: this.state.dataSource.cloneWithRows(announcements),
+          loaded: true,
+          selectedTab: 'announcementTab',
+        });
       } else {
-        selectedTab = 'eventTab';
+        this.setState({
+          dataSource2: this.state.dataSource.cloneWithRows(announcements),
+          loaded: true,
+        });
       }
-
-      this.setState({
-        dataSource2: this.state.dataSource.cloneWithRows(announcements),
-        loaded: true,
-        selectedTab,
-      });
     }
   }
 
